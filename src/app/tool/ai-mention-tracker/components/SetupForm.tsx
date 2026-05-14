@@ -99,13 +99,20 @@ export default function SetupForm({ onSubmit }: Props) {
   };
 
   return (
-    <div className="bg-background-light text-slate-800 antialiased flex w-full font-display">
-      <main className="flex-1 flex flex-col min-w-0 bg-background-light">
-        <div className="flex-1 p-4 md:p-8 lg:p-12 max-w-4xl mx-auto w-full">
+    <main className="flex-1 flex flex-col min-w-0 bg-background-light">
+      <div className="flex-1 p-4 md:p-8 lg:p-12 max-w-4xl mx-auto w-full">
           <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">New Tracking Setup</h2>
-              <p className="text-slate-500 mt-2">Configure parameters to run a fresh AI mention analysis.</p>
+            <div className="flex items-center gap-4">
+               <button 
+                 onClick={() => window.location.href = "/tool/ai-mention-tracker"}
+                 className="md:hidden p-2 text-slate-500 hover:bg-slate-100 rounded-lg"
+               >
+                 <span className="material-symbols-outlined">arrow_back</span>
+               </button>
+               <div>
+                <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">New Tracking Setup</h2>
+                <p className="text-slate-500 mt-2">Configure parameters to run a fresh AI mention analysis.</p>
+              </div>
             </div>
 
             <div className="flex flex-col gap-2">

@@ -22,34 +22,7 @@ export default function ProgressView({ logs, progress }: Props) {
   const currentLog = logs.length > 0 ? logs[logs.length - 1] : null;
 
   return (
-    <div className="bg-background-light font-display text-background-dark min-h-screen flex w-full overflow-hidden">
-      {/* Sidebar */}
-      <aside className="w-64 h-screen sticky top-0 shrink-0 flex flex-col justify-between bg-[#1e0f24] p-4 overflow-y-auto hidden md:flex">
-        <div className="flex flex-col gap-8">
-          <div className="flex gap-3 items-center">
-            <div className="bg-primary size-10 rounded-full flex items-center justify-center text-white font-bold shadow-sm shadow-primary/20">
-              <span className="material-symbols-outlined">troubleshoot</span>
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-white text-base font-medium leading-normal">AI Tracker</h1>
-              <p className="text-primary text-sm font-normal leading-normal">Active</p>
-            </div>
-          </div>
-          <nav className="flex flex-col gap-2">
-            <Link className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors" href="/tool/ai-mention-tracker">
-              <span className="material-symbols-outlined text-white">history</span>
-              <p className="text-white text-sm font-medium leading-normal">History</p>
-            </Link>
-            <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-primary/20 transition-colors">
-              <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>trending_up</span>
-              <p className="text-white text-sm font-medium leading-normal">Progress</p>
-            </div>
-          </nav>
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <main className="flex-1 h-screen overflow-y-auto p-8 flex flex-col gap-8">
+    <main className="flex-1 h-screen overflow-y-auto p-8 flex flex-col gap-8">
         {/* Header */}
         <header className="flex justify-between items-start">
           <div className="flex flex-col gap-2">

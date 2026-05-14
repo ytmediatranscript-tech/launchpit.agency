@@ -207,27 +207,20 @@ export default function DashboardView({ formData, logs, runId }: Props) {
       <div className="layout-container flex h-full grow flex-col">
         <div className="px-4 md:px-20 lg:px-40 flex flex-1 justify-center py-5">
           <div className="layout-content-container flex flex-col max-w-[1000px] flex-1" ref={dashboardRef}>
-            <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 px-6 md:px-10 py-3 bg-white rounded-t-xl shadow-sm mb-4">
-              <div className="flex items-center gap-4 text-background-dark">
-                <Link href="/tool/ai-mention-tracker" className="size-6 text-primary flex items-center justify-center hover:bg-primary/5 rounded">
-                  <span className="material-symbols-outlined text-2xl">arrow_back</span>
-                </Link>
-                <h2 className="text-background-dark text-lg font-bold leading-tight tracking-[-0.015em]">AI Mention Tracker</h2>
+            <div className="flex items-center justify-between px-4 pt-6 pb-2">
+              <div className="flex flex-col">
+                <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">{formData.brandName}</h2>
+                <p className="text-slate-500 mt-1">AI Mention Analysis Report • {new Date().toLocaleDateString()}</p>
               </div>
-              <div className="flex flex-1 justify-end gap-4 md:gap-8">
-                <button 
-                  onClick={handleExportPDF}
-                  disabled={isExporting}
-                  className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors"
-                >
-                  <span className="material-symbols-outlined mr-2 text-[18px]">download</span>
-                  <span className="truncate">{isExporting ? "Exporting..." : "Download Report"}</span>
-                </button>
-                <div className="size-10 bg-primary rounded-full flex items-center justify-center text-white font-bold border border-gray-200">
-                   <span className="material-symbols-outlined">person</span>
-                </div>
-              </div>
-            </header>
+              <button 
+                onClick={handleExportPDF}
+                disabled={isExporting}
+                className="flex items-center justify-center rounded-xl h-12 px-6 bg-primary text-white text-base font-bold shadow-lg shadow-primary/20 hover:bg-opacity-90 transition-all active:scale-95"
+              >
+                <span className="material-symbols-outlined mr-2">download</span>
+                {isExporting ? "Exporting..." : "Download Report"}
+              </button>
+            </div>
 
             {/* Metrics Cards */}
             <div className="flex flex-wrap gap-4 p-4">

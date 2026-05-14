@@ -16,36 +16,7 @@ export default function AIMentionTrackerHistoryPage() {
   }, [runsMap]);
 
   return (
-    <div className="bg-background-light text-slate-800 antialiased min-h-screen flex w-full font-display">
-      {/* Sidebar */}
-      <aside className="w-64 bg-background-dark text-white flex-shrink-0 flex flex-col hidden md:flex min-h-screen border-r border-slate-800/50">
-        <div className="h-16 flex items-center px-6 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold shadow-sm shadow-primary/20">
-              <span className="material-symbols-outlined text-lg">troubleshoot</span>
-            </div>
-            <h1 className="font-display font-bold text-lg tracking-tight">Mention Tracker</h1>
-          </div>
-        </div>
-        <nav className="p-4 flex-1">
-          <ul className="space-y-1">
-            <li>
-              <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium transition-colors" href="/tool/ai-mention-tracker/setup">
-                <span className="material-symbols-outlined text-[20px]">settings</span>
-                Setup Tracker
-              </Link>
-            </li>
-            <li>
-              <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-medium transition-colors" href="/tool/ai-mention-tracker">
-                <span className="material-symbols-outlined text-[20px]">history</span>
-                History Runs
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
-      <main className="flex-1 flex flex-col min-w-0 bg-background-light">
+    <main className="flex-1 flex flex-col min-w-0 bg-background-light">
         <div className="flex-1 p-4 md:p-8 lg:p-12 max-w-5xl mx-auto w-full">
           <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
