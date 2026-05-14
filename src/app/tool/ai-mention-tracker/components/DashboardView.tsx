@@ -14,6 +14,7 @@ import {
 import { Bar, Doughnut } from "react-chartjs-2";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import type { FormData, LogEntry } from "../types";
 import { PLATFORM_LIST } from "../types";
@@ -47,6 +48,7 @@ export default function DashboardView({ formData, logs, runId }: Props) {
     topKeyword,
     bestPlatform,
     visibilityScore,
+    allSources,
   } = useMemo(() => {
     let brandMentions = 0;
     const compCounts: Record<string, number> = {};
@@ -62,6 +64,8 @@ export default function DashboardView({ formData, logs, runId }: Props) {
     formData.keywords.forEach((k) => {
       heatmap[k] = {};
     });
+
+    const sources: Record<string, { count: number; latestContext: string }> = {};
 
     let validLogs = 0;
 
@@ -80,10 +84,26 @@ export default function DashboardView({ formData, logs, runId }: Props) {
         }
         if (log.aiResponseText) {
           const lowerText = log.aiResponseText.toLowerCase();
+          
+          // Competitor detection
           formData.competitors.forEach((comp) => {
             if (lowerText.includes(comp.toLowerCase())) {
               compCounts[comp]++;
             }
+          });
+
+          // Source extraction (simple regex for URLs)
+          const urlRegex = /(https?:\/\/[^\s\]\)]+)/g;
+          const urls = log.aiResponseText.match(urlRegex) || [];
+          urls.forEach(url => {
+            try {
+              const domain = new URL(url).hostname.replace('www.', '');
+              if (!sources[domain]) {
+                sources[domain] = { count: 0, latestContext: "" };
+              }
+              sources[domain].count++;
+              sources[domain].latestContext = log.aiResponseText?.slice(0, 100) + "..." || "";
+            } catch(e) {}
           });
         }
       }
@@ -107,7 +127,8 @@ export default function DashboardView({ formData, logs, runId }: Props) {
       }
     }
 
-    const visScore = validLogs > 0 ? Math.round((brandMentions / validLogs) * 100) : 0;
+    const totalChecks = formData.keywords.length * PLATFORM_LIST.length;
+    const visScore = totalChecks > 0 ? Math.round((brandMentions / totalChecks) * 100) : 0;
 
     return {
       brandCount: brandMentions,
@@ -117,6 +138,7 @@ export default function DashboardView({ formData, logs, runId }: Props) {
       topKeyword: bestKey,
       bestPlatform: bestPlat,
       visibilityScore: visScore,
+      allSources: Object.entries(sources).sort((a,b) => b[1].count - a[1].count).slice(0, 10),
     };
   }, [logs, formData]);
 
@@ -124,17 +146,36 @@ export default function DashboardView({ formData, logs, runId }: Props) {
     if (!dashboardRef.current) return;
     setIsExporting(true);
     try {
+      // Use a slightly lower scale for stability and disable problematic CSS features
       const canvas = await html2canvas(dashboardRef.current, {
-        scale: 2,
+        scale: 1.5,
         backgroundColor: "#ffffff",
         useCORS: true,
+        allowTaint: true,
+        logging: false,
+        onclone: (clonedDoc) => {
+          // Remove any problematic lab() colors or complex CSS during capture
+          const elements = clonedDoc.getElementsByTagName("*");
+          for (let i = 0; i < elements.length; i++) {
+            const el = elements[i] as HTMLElement;
+            // Force reset any custom color functions that html2canvas might choke on
+            if (el.style?.color?.includes('lab(')) el.style.color = 'inherit';
+            if (el.style?.backgroundColor?.includes('lab(')) el.style.backgroundColor = 'transparent';
+          }
+        }
       });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      
+      // If content is very long, we should ideally multi-page, 
+      // but for now we'll ensure it fits or scales
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, Math.min(pdfHeight, 280)); 
       pdf.save(`AI-Mention-Report-${formData.brandName}.pdf`);
+    } catch (err) {
+      console.error("PDF Export failed:", err);
+      alert("Failed to generate PDF. Some browser extensions or complex CSS might be interfering.");
     } finally {
       setIsExporting(false);
     }
@@ -168,9 +209,9 @@ export default function DashboardView({ formData, logs, runId }: Props) {
           <div className="layout-content-container flex flex-col max-w-[1000px] flex-1" ref={dashboardRef}>
             <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-gray-200 px-6 md:px-10 py-3 bg-white rounded-t-xl shadow-sm mb-4">
               <div className="flex items-center gap-4 text-background-dark">
-                <div className="size-6 text-primary flex items-center justify-center">
-                  <span className="material-symbols-outlined text-2xl">radar</span>
-                </div>
+                <Link href="/tool/ai-mention-tracker" className="size-6 text-primary flex items-center justify-center hover:bg-primary/5 rounded">
+                  <span className="material-symbols-outlined text-2xl">arrow_back</span>
+                </Link>
                 <h2 className="text-background-dark text-lg font-bold leading-tight tracking-[-0.015em]">AI Mention Tracker</h2>
               </div>
               <div className="flex flex-1 justify-end gap-4 md:gap-8">
@@ -378,20 +419,21 @@ export default function DashboardView({ formData, logs, runId }: Props) {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-3 text-primary font-medium cursor-pointer flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[16px]">link</span> blog.hubspot.com
-                      </td>
-                      <td className="px-6 py-3 text-background-dark">142</td>
-                      <td className="px-6 py-3 text-gray-500 truncate max-w-[300px]">"Top 10 SEO Tools for 2024..."</td>
-                    </tr>
-                    <tr className="hover:bg-gray-50">
-                      <td className="px-6 py-3 text-primary font-medium cursor-pointer flex items-center gap-2">
-                        <span className="material-symbols-outlined text-[16px]">link</span> searchengineland.com
-                      </td>
-                      <td className="px-6 py-3 text-background-dark">89</td>
-                      <td className="px-6 py-3 text-gray-500 truncate max-w-[300px]">"Comparing modern keyword research platforms..."</td>
-                    </tr>
+                    {allSources.length === 0 ? (
+                      <tr>
+                        <td colSpan={3} className="px-6 py-8 text-center text-gray-400 italic">No external sources cited yet.</td>
+                      </tr>
+                    ) : (
+                      allSources.map(([domain, data], i) => (
+                        <tr key={i} className="hover:bg-gray-50">
+                          <td className="px-6 py-3 text-primary font-medium cursor-pointer flex items-center gap-2">
+                            <span className="material-symbols-outlined text-[16px]">link</span> {domain}
+                          </td>
+                          <td className="px-6 py-3 text-background-dark">{data.count}</td>
+                          <td className="px-6 py-3 text-gray-500 truncate max-w-[300px]">{data.latestContext}</td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

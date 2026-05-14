@@ -1,99 +1,145 @@
 "use client";
 
-import React, { useState } from "react";
-import type { FormData, LogEntry, Step, SSEEvent } from "./types";
-import SetupForm from "./components/SetupForm";
-import ProgressView from "./components/ProgressView";
-import DashboardView from "./components/DashboardView";
+import React from "react";
+import Link from "next/link";
+import { useTrackerStore } from "./store";
 
-export default function AIMentionTrackerPage() {
-  const [step, setStep] = useState<Step>("SETUP");
-  const [formData, setFormData] = useState<FormData | null>(null);
-  const [logs, setLogs] = useState<LogEntry[]>([]);
-  const [progress, setProgress] = useState(0);
-  const [runId, setRunId] = useState<string | null>(null);
+export default function AIMentionTrackerHistoryPage() {
+  const runsMap = useTrackerStore((state) => state.runs);
+  const deleteRun = useTrackerStore((state) => state.deleteRun);
 
-  const startRun = async (data: FormData) => {
-    setFormData(data);
-    setStep("RUNNING");
-    setLogs([]);
-    setProgress(0);
-    setRunId(null);
-
-    try {
-      const response = await fetch("/api/run-tracker", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (!response.ok || !response.body) {
-        throw new Error("Failed to start tracker API.");
-      }
-
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        const lines = buffer.split("\n\n");
-        buffer = lines.pop() || "";
-
-        for (const line of lines) {
-          if (line.trim().startsWith("data: ")) {
-            try {
-              const eventData: SSEEvent = JSON.parse(line.trim().slice(6));
-
-              if (eventData.done) {
-                if (eventData.runId) setRunId(eventData.runId);
-                setStep("DASHBOARD");
-                return; // Finished
-              }
-
-              // Update logs
-              setLogs((prev) => [
-                ...prev,
-                {
-                  step: eventData.step,
-                  total: eventData.total,
-                  keyword: eventData.keyword,
-                  platform: eventData.platform,
-                  platformLabel: eventData.platformLabel,
-                  mentioned: eventData.mentioned,
-                  position: eventData.position,
-                  aiResponseText: eventData.aiResponseText,
-                  error: eventData.error,
-                },
-              ]);
-
-              // Update progress bar
-              if (eventData.total > 0) {
-                setProgress((eventData.step / eventData.total) * 100);
-              }
-            } catch (parseError) {
-              console.error("Failed to parse SSE line:", line, parseError);
-            }
-          }
-        }
-      }
-    } catch (error) {
-      console.error("Stream error:", error);
-      alert("An error occurred while tracking. Please check the console.");
-      setStep("SETUP");
-    }
-  };
+  // Memoize runs to prevent re-renders unless store changes
+  const sortedRuns = React.useMemo(() => {
+    return Object.values(runsMap).sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  }, [runsMap]);
 
   return (
-    <main>
-      {step === "SETUP" && <SetupForm onSubmit={startRun} />}
-      {step === "RUNNING" && <ProgressView logs={logs} progress={progress} />}
-      {step === "DASHBOARD" && formData && (
-        <DashboardView formData={formData} logs={logs} runId={runId} />
-      )}
-    </main>
+    <div className="bg-background-light text-slate-800 antialiased min-h-screen flex w-full font-display">
+      {/* Sidebar */}
+      <aside className="w-64 bg-background-dark text-white flex-shrink-0 flex flex-col hidden md:flex min-h-screen border-r border-slate-800/50">
+        <div className="h-16 flex items-center px-6 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold shadow-sm shadow-primary/20">
+              <span className="material-symbols-outlined text-lg">troubleshoot</span>
+            </div>
+            <h1 className="font-display font-bold text-lg tracking-tight">Mention Tracker</h1>
+          </div>
+        </div>
+        <nav className="p-4 flex-1">
+          <ul className="space-y-1">
+            <li>
+              <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium transition-colors" href="/tool/ai-mention-tracker/setup">
+                <span className="material-symbols-outlined text-[20px]">settings</span>
+                Setup Tracker
+              </Link>
+            </li>
+            <li>
+              <Link className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-medium transition-colors" href="/tool/ai-mention-tracker">
+                <span className="material-symbols-outlined text-[20px]">history</span>
+                History Runs
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+
+      <main className="flex-1 flex flex-col min-w-0 bg-background-light">
+        <div className="flex-1 p-4 md:p-8 lg:p-12 max-w-5xl mx-auto w-full">
+          <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-display font-black text-slate-900 tracking-tight">Tracking History</h2>
+              <p className="text-slate-500 mt-2">Manage and revisit your previous AI mention analysis reports.</p>
+            </div>
+            <Link 
+              href="/tool/ai-mention-tracker/setup"
+              className="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg shadow-md shadow-primary/20 transition-all flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined">add</span>
+              New Tracking Run
+            </Link>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-medium">
+                  <tr>
+                    <th className="px-6 py-4">Brand</th>
+                    <th className="px-6 py-4">Domain</th>
+                    <th className="px-6 py-4">Target</th>
+                    <th className="px-6 py-4">Date Run</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {sortedRuns.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-6 py-12 text-center text-slate-400 italic">
+                        No previous runs found. Start your first analysis!
+                      </td>
+                    </tr>
+                  ) : (
+                    sortedRuns.map((run) => (
+                      <tr key={run.slug} className="hover:bg-slate-50 transition-colors group">
+                        <td className="px-6 py-4 font-medium text-slate-900">{run.config.brandName}</td>
+                        <td className="px-6 py-4 text-slate-500 font-mono text-xs">{run.config.brandDomain}</td>
+                        <td className="px-6 py-4 text-slate-500">
+                          {run.config.targetCountry} / {(run.config.targetLanguage || 'en').toUpperCase()}
+                        </td>
+                        <td className="px-6 py-4 text-slate-500">
+                          {new Date(run.createdAt).toLocaleDateString(undefined, {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </td>
+                        <td className="px-6 py-4">
+                          {run.status === "DASHBOARD" ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-green-600"></span> Completed
+                            </span>
+                          ) : run.status === "RUNNING" ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span> In Progress ({Math.round(run.progress)}%)
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                              <span className="w-1.5 h-1.5 rounded-full bg-yellow-600"></span> Setup
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                          <Link 
+                            href={`/tool/ai-mention-tracker/${run.slug}`}
+                            className="p-2 text-primary hover:bg-primary/5 rounded-lg transition-colors flex items-center gap-1 font-bold"
+                            title="View Report"
+                          >
+                            <span className="material-symbols-outlined">visibility</span>
+                          </Link>
+                          <button 
+                            onClick={() => {
+                              if(confirm('Are you sure you want to delete this run?')) {
+                                deleteRun(run.slug);
+                              }
+                            }}
+                            className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            title="Delete Run"
+                          >
+                            <span className="material-symbols-outlined text-[20px]">delete</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }

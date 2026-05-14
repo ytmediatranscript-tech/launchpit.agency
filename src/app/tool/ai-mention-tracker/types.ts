@@ -5,6 +5,10 @@ export interface FormData {
   brandDomain: string;
   competitors: string[];
   keywords: string[];
+  apiLogin?: string;
+  apiPassword?: string;
+  targetCountry?: string;
+  targetLanguage?: string;
 }
 
 export interface SSEEvent {

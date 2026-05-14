@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { FormData } from "../types";
 
@@ -8,7 +8,7 @@ interface Props {
   onSubmit: (data: FormData) => void;
 }
 
-const DEMO_SCENARIOS = [
+const TEST_INPUTS = [
   {
     label: "Big Tech (Cloud)",
     icon: "cloud",
@@ -55,12 +55,12 @@ export default function SetupForm({ onSubmit }: Props) {
   const [targetCountry, setTargetCountry] = useState("US");
   const [targetLanguage, setTargetLanguage] = useState("en");
 
-  const loadDemo = (scenario: typeof DEMO_SCENARIOS[0]) => {
-    setBrandName(scenario.data.brandName);
-    setBrandDomain(scenario.data.brandDomain);
-    setCompetitors(scenario.data.competitors);
-    setKeywordsText(scenario.data.keywords);
-    setBrandKeywordsText(scenario.data.brandKeywords);
+  const loadTest = (test: typeof TEST_INPUTS[0]) => {
+    setBrandName(test.data.brandName);
+    setBrandDomain(test.data.brandDomain);
+    setCompetitors(test.data.competitors);
+    setKeywordsText(test.data.keywords);
+    setBrandKeywordsText(test.data.brandKeywords);
   };
 
   const addCompetitor = () => setCompetitors([...competitors, ""]);
@@ -99,50 +99,8 @@ export default function SetupForm({ onSubmit }: Props) {
   };
 
   return (
-    <div className="bg-background-light text-slate-800 antialiased min-h-screen flex w-full font-display">
-      {/* Sidebar */}
-      <aside className="w-64 bg-background-dark text-white flex-shrink-0 flex flex-col hidden md:flex min-h-screen border-r border-slate-800/50">
-        <div className="h-16 flex items-center px-6 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold shadow-sm shadow-primary/20">
-              <span className="material-symbols-outlined text-lg">troubleshoot</span>
-            </div>
-            <h1 className="font-display font-bold text-lg tracking-tight">Mention Tracker</h1>
-          </div>
-        </div>
-        <nav className="p-4 flex-1">
-          <ul className="space-y-1">
-            <li>
-              <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary font-medium transition-colors" href="#">
-                <span className="material-symbols-outlined text-[20px]">settings</span>
-                Setup Tracker
-              </a>
-            </li>
-            <li>
-              <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/5 font-medium transition-colors" href="#">
-                <span className="material-symbols-outlined text-[20px]">history</span>
-                History Runs
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </aside>
-
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 bg-background-light overflow-y-auto">
-        {/* Mobile Header */}
-        <header className="md:hidden h-16 bg-white border-b border-slate-200 flex items-center px-4 justify-between sticky top-0 z-10">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold">
-              <span className="material-symbols-outlined text-sm">troubleshoot</span>
-            </div>
-            <h1 className="font-display font-bold text-lg text-slate-800">Mention Tracker</h1>
-          </div>
-          <button className="text-slate-500 hover:text-slate-700">
-            <span className="material-symbols-outlined">menu</span>
-          </button>
-        </header>
-
+    <div className="bg-background-light text-slate-800 antialiased flex w-full font-display">
+      <main className="flex-1 flex flex-col min-w-0 bg-background-light">
         <div className="flex-1 p-4 md:p-8 lg:p-12 max-w-4xl mx-auto w-full">
           <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
@@ -150,30 +108,27 @@ export default function SetupForm({ onSubmit }: Props) {
               <p className="text-slate-500 mt-2">Configure parameters to run a fresh AI mention analysis.</p>
             </div>
 
-            {/* Quick Demo Section */}
             <div className="flex flex-col gap-2">
               <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Quick Test Scenarios</span>
               <div className="flex gap-2">
-                {DEMO_SCENARIOS.map((scenario, idx) => (
+                {TEST_INPUTS.map((test, idx) => (
                   <button
                     key={idx}
                     type="button"
-                    onClick={() => loadDemo(scenario)}
+                    onClick={() => loadTest(test)}
                     className="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-bold text-slate-700 hover:border-primary hover:text-primary transition-all shadow-sm"
                   >
-                    <span className="material-symbols-outlined text-sm">{scenario.icon}</span>
-                    {scenario.label.split(' ')[0]}
+                    <span className="material-symbols-outlined text-sm">{test.icon}</span>
+                    {test.label.split(' ')[0]}
                   </button>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Setup Card */}
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden mb-12">
             <form onSubmit={handleSubmit}>
               <div className="p-6 md:p-8 space-y-10">
-                {/* Section 1: DataForSEO */}
                 <section>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="text-lg font-bold text-slate-800 border-b-2 border-primary/20 pb-1 inline-block">1. DataForSEO Credentials</h3>
@@ -205,7 +160,6 @@ export default function SetupForm({ onSubmit }: Props) {
                   </div>
                 </section>
 
-                {/* Section 2: Brand Info */}
                 <section>
                   <h3 className="text-lg font-bold text-slate-800 border-b-2 border-primary/20 pb-1 inline-block mb-4">2. Brand Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -234,7 +188,6 @@ export default function SetupForm({ onSubmit }: Props) {
                   </div>
                 </section>
 
-                {/* Section 3: Configuration */}
                 <section>
                   <h3 className="text-lg font-bold text-slate-800 border-b-2 border-primary/20 pb-1 inline-block mb-4">3. Target Configuration</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -267,7 +220,6 @@ export default function SetupForm({ onSubmit }: Props) {
                   </div>
                 </section>
 
-                {/* Section 4: Competitors */}
                 <section>
                   <h3 className="text-lg font-bold text-slate-800 border-b-2 border-primary/20 pb-1 inline-block mb-4">4. Competitor Domains</h3>
                   <div className="space-y-3">
@@ -308,7 +260,6 @@ export default function SetupForm({ onSubmit }: Props) {
                   </div>
                 </section>
 
-                {/* Section 5: Keywords */}
                 <section>
                   <h3 className="text-lg font-bold text-slate-800 border-b-2 border-primary/20 pb-1 inline-block mb-4">5. Keywords (One per line)</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -337,7 +288,6 @@ export default function SetupForm({ onSubmit }: Props) {
                 </section>
               </div>
 
-              {/* Footer Action */}
               <div className="bg-slate-50 p-6 md:p-8 border-t border-slate-200 flex justify-end">
                 <button
                   className="w-full md:w-auto px-8 py-4 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-bold rounded-lg shadow-md shadow-blue-500/20 transition-colors flex items-center justify-center gap-2 text-lg"
@@ -348,61 +298,6 @@ export default function SetupForm({ onSubmit }: Props) {
                 </button>
               </div>
             </form>
-          </div>
-
-          {/* Recent Runs Table */}
-          <div>
-            <h3 className="text-xl font-display font-bold text-slate-900 mb-4">Recent Runs</h3>
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-medium">
-                    <tr>
-                      <th className="px-6 py-4">Brand</th>
-                      <th className="px-6 py-4">Domain</th>
-                      <th className="px-6 py-4">Target</th>
-                      <th className="px-6 py-4">Date Run</th>
-                      <th className="px-6 py-4 text-right">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-slate-900">TechFlow</td>
-                      <td className="px-6 py-4 text-slate-500">techflow.io</td>
-                      <td className="px-6 py-4 text-slate-500">US / EN</td>
-                      <td className="px-6 py-4 text-slate-500">Oct 24, 2023</td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600"></span> Completed
-                        </span>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-slate-900">HealthPlus</td>
-                      <td className="px-6 py-4 text-slate-500">healthplus.com</td>
-                      <td className="px-6 py-4 text-slate-500">UK / EN</td>
-                      <td className="px-6 py-4 text-slate-500">Oct 20, 2023</td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-green-600"></span> Completed
-                        </span>
-                      </td>
-                    </tr>
-                    <tr className="hover:bg-slate-50 transition-colors">
-                      <td className="px-6 py-4 font-medium text-slate-900">FinServe</td>
-                      <td className="px-6 py-4 text-slate-500">finserve.app</td>
-                      <td className="px-6 py-4 text-slate-500">CA / EN</td>
-                      <td className="px-6 py-4 text-slate-500">Oct 15, 2023</td>
-                      <td className="px-6 py-4 text-right">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-600"></span> Failed
-                        </span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
           </div>
         </div>
       </main>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import TrackerStoreProvider from "./components/TrackerStoreProvider";
 
 export const metadata: Metadata = {
   title: "AI Mention Tracker | LaunchPit Internal",
@@ -12,7 +13,9 @@ export default function TrackerLayout({
 }) {
   return (
     <div className="bg-background-light text-slate-900 antialiased font-display min-h-screen w-full">
-      {children}
+      <TrackerStoreProvider>
+        {children}
+      </TrackerStoreProvider>
     </div>
   );
 }

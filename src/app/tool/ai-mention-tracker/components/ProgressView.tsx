@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import type { LogEntry } from "../types";
 
 interface Props {
@@ -21,9 +22,9 @@ export default function ProgressView({ logs, progress }: Props) {
   const currentLog = logs.length > 0 ? logs[logs.length - 1] : null;
 
   return (
-    <div className="bg-background-light font-display text-background-dark h-screen overflow-hidden flex w-full">
+    <div className="bg-background-light font-display text-background-dark min-h-screen flex w-full overflow-hidden">
       {/* Sidebar */}
-      <aside className="w-64 h-full shrink-0 flex flex-col justify-between bg-[#1e0f24] p-4 overflow-y-auto hidden md:flex">
+      <aside className="w-64 h-screen sticky top-0 shrink-0 flex flex-col justify-between bg-[#1e0f24] p-4 overflow-y-auto hidden md:flex">
         <div className="flex flex-col gap-8">
           <div className="flex gap-3 items-center">
             <div className="bg-primary size-10 rounded-full flex items-center justify-center text-white font-bold shadow-sm shadow-primary/20">
@@ -35,36 +36,30 @@ export default function ProgressView({ logs, progress }: Props) {
             </div>
           </div>
           <nav className="flex flex-col gap-2">
-            <a className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors" href="#">
-              <span className="material-symbols-outlined text-white">dashboard</span>
-              <p className="text-white text-sm font-medium leading-normal">Dashboard</p>
-            </a>
+            <Link className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors" href="/tool/ai-mention-tracker">
+              <span className="material-symbols-outlined text-white">history</span>
+              <p className="text-white text-sm font-medium leading-normal">History</p>
+            </Link>
             <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-primary/20 transition-colors">
               <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>trending_up</span>
               <p className="text-white text-sm font-medium leading-normal">Progress</p>
             </div>
           </nav>
         </div>
-        <div className="flex flex-col gap-1">
-          <a className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/5 transition-colors" href="#">
-            <span className="material-symbols-outlined text-white">help</span>
-            <p className="text-white text-sm font-medium leading-normal">Help</p>
-          </a>
-        </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 h-full overflow-y-auto p-8 flex flex-col gap-8">
+      <main className="flex-1 h-screen overflow-y-auto p-8 flex flex-col gap-8">
         {/* Header */}
         <header className="flex justify-between items-start">
           <div className="flex flex-col gap-2">
             <h2 className="text-4xl font-black leading-tight tracking-tight text-background-dark">Run Progress</h2>
             <p className="text-background-dark/70 text-base font-normal">Currently scanning for mentions across selected platforms</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-600 rounded-lg hover:bg-red-50 font-medium transition-colors">
+          <Link href="/tool/ai-mention-tracker" className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-600 rounded-lg hover:bg-red-50 font-medium transition-colors">
             <span className="material-symbols-outlined text-lg">cancel</span>
-            Cancel Run
-          </button>
+            Back to History
+          </Link>
         </header>
 
         {/* Progress Card */}

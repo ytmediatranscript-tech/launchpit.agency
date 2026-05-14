@@ -47,6 +47,8 @@ interface DataForSEOResult {
 }
 
 interface DataForSEOTask {
+  status_code?: number;
+  status_message?: string;
   result?: DataForSEOResult[];
 }
 

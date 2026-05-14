@@ -15,6 +15,8 @@ interface RunTrackerPayload {
   keywords: string[];
   apiLogin?: string;
   apiPassword?: string;
+  targetCountry?: string;
+  targetLanguage?: string;
 }
 
 /* ------------------------------------------------------------------ */
