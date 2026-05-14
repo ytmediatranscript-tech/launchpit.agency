@@ -43,13 +43,15 @@ export async function POST(request: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        // Create the run in SQLite
+        /*
+        // Create the run in SQLite (Disabled for Vercel/Serverless)
         createRun({
           id: runId,
           brand_domain: brandDomain,
           brand_name: brandName,
           competitors,
         });
+        */
 
         let step = 0;
 
@@ -67,15 +69,19 @@ export async function POST(request: NextRequest) {
                 apiPassword
               );
 
-              // Store in database
-              insertResult({
-                run_id: runId,
-                keyword,
-                platform: platform.id,
-                mentioned: result.mentioned,
-                mention_position: result.position,
-                ai_response_text: result.ai_response_text,
-              });
+              /* 
+              // Store in database (Disabled for Vercel/Serverless stability)
+              try {
+                insertResult({
+                  run_id: runId,
+                  keyword,
+                  platform: platform.id,
+                  mentioned: result.mentioned,
+                  mention_position: result.position,
+                  ai_response_text: result.ai_response_text,
+                });
+              } catch(e) { console.error("DB Insert Error:", e); }
+              */
 
               // Push SSE event to client
               const event: SSEEvent = {
@@ -110,16 +116,20 @@ export async function POST(request: NextRequest) {
                 encoder.encode(`data: ${JSON.stringify(event)}\n\n`)
               );
 
-              // Also store the error result
-              insertResult({
-                run_id: runId,
-                keyword,
-                platform: platform.id,
-                mentioned: false,
-                mention_position: null,
-                ai_response_text:
-                  err instanceof Error ? err.message : "Unknown error",
-              });
+              /*
+              // Also store the error result (Disabled for Vercel)
+              try {
+                insertResult({
+                  run_id: runId,
+                  keyword,
+                  platform: platform.id,
+                  mentioned: false,
+                  mention_position: null,
+                  ai_response_text:
+                    err instanceof Error ? err.message : "Unknown error",
+                });
+              } catch(e) { console.error("DB Insert Error:", e); }
+              */
             }
           }
         }
