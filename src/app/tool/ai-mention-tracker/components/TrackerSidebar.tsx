@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Link from "react-router-dom"; // Note: In Next.js we use Link from next/link usually, but for a global component we'll use window.location or next/navigation
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function TrackerSidebar() {

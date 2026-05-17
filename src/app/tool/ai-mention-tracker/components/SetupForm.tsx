@@ -308,6 +308,5 @@ export default function SetupForm({ onSubmit }: Props) {
           </div>
         </div>
       </main>
-    </div>
   );
 }

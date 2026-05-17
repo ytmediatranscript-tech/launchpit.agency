@@ -5,6 +5,10 @@ import TrackerSidebar from "./components/TrackerSidebar";
 export const metadata = {
   title: "AI Mention Tracker | LaunchPit",
   description: "Track your brand mentions across top AI platforms like ChatGPT, Gemini, and Claude.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function TrackerLayout({

@@ -111,6 +111,5 @@ export default function AIMentionTrackerHistoryPage() {
           </div>
         </div>
       </main>
-    </div>
   );
 }

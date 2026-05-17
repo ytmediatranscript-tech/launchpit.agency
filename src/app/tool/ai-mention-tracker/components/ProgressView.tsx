@@ -113,6 +113,5 @@ export default function ProgressView({ logs, progress }: Props) {
           </div>
         </section>
       </main>
-    </div>
   );
 }
