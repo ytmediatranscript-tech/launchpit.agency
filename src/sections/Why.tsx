@@ -25,7 +25,7 @@ const Why = () => {
         </div>
         <div className="row">
           {boxes.map((box, index) => (
-            <div key={index} className="col-md-4 reveal">
+            <div key={index} className="col-md-4 mb-4 mb-md-0 reveal">
               <div className="boxwrap">
                 <h4>{box.title}</h4>
                 <p>{box.desc}</p>

@@ -14,16 +14,25 @@ const CTA = () => {
   useEffect(() => {
     if (!imageRef.current) return;
 
-    gsap.to(imageRef.current.querySelector("img"), {
-      yPercent: -20,
-      ease: "none",
-      scrollTrigger: {
-        trigger: imageRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
+    gsap.fromTo(imageRef.current,
+      {
+        y: 20,
+        opacity: 0,
+        scale: 0.95
       },
-    });
+      {
+        y: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: imageRef.current,
+          start: "top 85%",
+          toggleActions: "play none none none"
+        }
+      }
+    );
   }, []);
 
   return (
@@ -37,19 +46,21 @@ const CTA = () => {
               Each phase is designed to attract the right audience, convert them effectively, and continuously improve results over time.
             </p>
             <div className="btnwrapper d-flex justify-content-start">
-              <Link href="#booking" className="button-body button-body-white bg-white">
+              <a href="#booking" className="button-body button-body-white bg-white">
                 <span className="button-text text-black">Book A Consultation</span>
-              </Link>
+              </a>
             </div>
           </div>
           <div className="col-md-6">
-            <div ref={imageRef} className="img-wrapper rounded-3 overflow-hidden aspect-[4/3] relative">
+            <div ref={imageRef} className="img-wrapper rounded-3 overflow-hidden">
               <Image
-                className="rounded-3 absolute inset-0"
-                src="/images/2026/02/portfolio-image-two.jpg"
+                className="rounded-3 w-full h-auto"
+                src="/images/2026/02/simg.png"
                 alt="Strategy"
-                fill
-                style={{ objectFit: "cover", transform: "scale(1.2)" }}
+                width={800}
+                height={800}
+                priority
+                style={{ display: "block" }}
               />
             </div>
           </div>

@@ -63,7 +63,7 @@ const Hero = () => {
       ease: "expo.out",
       delay: 0.8
     });
-    
+
     gsap.from(".m-4, .btnwrapper", {
       opacity: 0,
       y: 30,
@@ -113,19 +113,21 @@ const Hero = () => {
                 ))}
               </div>
             </div>
-            <div className="imgwrapper rotate-image-wrapper w-80">
-              <Image src="/images/2026/02/chakra-icon.svg" alt="" width={100} height={100} />
-            </div>
-            <div className="m-4">
-              From Google/Meta Ads and SEO to social media management and video production,{" "}
-              <span className="d-lg-block">
-                we create cohesive digital strategies to generate consistent leads and sales
-              </span>
-            </div>
-            <div className="btnwrapper d-flex justify-content-center">
-              <Link href="#booking" className="button-body">
-                <span className="button-text">Get Your Proposal</span>
-              </Link>
+            <div className="hero-lower-content">
+              <div className="imgwrapper rotate-image-wrapper w-80">
+                <Image src="/images/2026/02/chakra-icon.svg" alt="" width={100} height={100} />
+              </div>
+              <div className="m-4">
+                From Google/Meta Ads and SEO to social media management and video production,{" "}
+                <span className="d-lg-block">
+                  we create cohesive digital strategies to generate consistent leads and sales
+                </span>
+              </div>
+              <div className="btnwrapper d-flex justify-content-center">
+                <a href="#booking" className="button-body">
+                  <span className="button-text">Book A Consultation</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>

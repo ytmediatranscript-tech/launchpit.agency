@@ -21,7 +21,7 @@ const Rank = () => {
           </h2>
           <p>
             LaunchPit is not your average digital agency. We are the pit crew your brand never had —{" "}
-            <span className="d-block">fast, precise, and built for performance. From SEO and paid ads to video production and AI</span> workflows, we plug in and launch you forward.
+            <span className="d-lg-block">fast, precise, and built for performance. From SEO and paid ads to video production and AI</span> workflows, we plug in and launch you forward.
           </p>
         </div>
         <div className="service-list d-flex flex-wrap gap-3 align-items-center justify-content-center reveal">

@@ -16,7 +16,7 @@ const Footer = () => {
                       <div className="footer-innerwrap">
                         <div className="container-fluid">
                           <div className="row">
-                            <div className="col-md-4">
+                            <div className="col-md-4 mb-5 mb-md-0">
                               <div className="logowrapper mb-3">
                                 <Link href="/" className="heading-two text-white">
                                   LaunchPit

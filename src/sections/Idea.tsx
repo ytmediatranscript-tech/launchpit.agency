@@ -33,9 +33,9 @@ const Idea = () => {
             </span>
           </p>
           <div className="btnwrapper d-flex justify-content-center">
-            <Link href="#booking" className="button-body">
+            <a href="#booking" className="button-body">
               <span className="button-text">Schedule a Consultation</span>
-            </Link>
+            </a>
           </div>
         </div>
         <div className="row">

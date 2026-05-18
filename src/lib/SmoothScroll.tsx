@@ -54,11 +54,11 @@ const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    document.addEventListener("click", handleAnchorClick);
+    document.addEventListener("click", handleAnchorClick, true);
 
     return () => {
       lenis.destroy();
-      document.removeEventListener("click", handleAnchorClick);
+      document.removeEventListener("click", handleAnchorClick, true);
     };
   }, []);
 

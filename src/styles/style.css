@@ -305,7 +305,7 @@ h6, .heading-six {
     color: var(--_colors---black);
     line-height: .8;
     font-weight: var(--font-weight--heading-weight);
-    letter-spacing: -.4rem;
+    letter-spacing: -0.04em;
     font-size: clamp(2.5rem, 11.5vw, 12.5rem);
 }
 .small-btn {

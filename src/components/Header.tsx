@@ -32,18 +32,18 @@ const Header = () => {
         <div id="rmp-menu-wrap-147" className="rmp-menu-wrap">
           <ul id="rmp-menu-147" className="rmp-menu" role="menubar" aria-label="Mobile Main Menu">
             <li className="rmp-menu-item">
-              <Link href="#booking" className="rmp-menu-item-link" onClick={() => setIsMenuOpen(false)}>
+              <a href="#booking" className="rmp-menu-item-link" onClick={() => setIsMenuOpen(false)}>
                 Contact Us
-              </Link>
+              </a>
             </li>
             <li className="rmp-menu-item">
-              <Link href="#booking" className="rmp-menu-item-link" onClick={() => setIsMenuOpen(false)}>
+              <a href="#booking" className="rmp-menu-item-link" onClick={() => setIsMenuOpen(false)}>
                 Book Online
-              </Link>
+              </a>
             </li>
             <li className="rmp-menu-item">
               <a href="https://mail.google.com/mail/?view=cm&fs=1&to=biswa@launchpit.agency" target="_blank" rel="noopener noreferrer" className="rmp-menu-item-link" onClick={() => setIsMenuOpen(false)}>
-                biswa@launchpit.agency
+                Email Us
               </a>
             </li>
           </ul>
@@ -129,15 +129,15 @@ const Header = () => {
             <nav className="primary-menu-wrapper" aria-label="Horizontal">
               <ul className="primary-menu reset-list-style">
                 <li id="menu-item-112" className="menu-item">
-                  <Link href="#booking">Contact Us</Link>
+                  <a href="#booking">Contact Us</a>
                 </li>
                 <li id="menu-item-113" className="menu-item">
-                  <Link href="#booking">Book Online</Link>
+                  <a href="#booking">Book Online</a>
                 </li>
                 <li id="menu-item-email" className="menu-item">
                   <a href="https://mail.google.com/mail/?view=cm&fs=1&to=biswa@launchpit.agency" target="_blank" rel="noopener noreferrer" className="email-header-btn">
                     <span className="material-symbols-outlined align-middle" style={{ fontSize: "18px", marginTop: "-3px" }}>mail</span>
-                    <span>biswa@launchpit.agency</span>
+                    <span>Email Us</span>
                   </a>
                 </li>
               </ul>
