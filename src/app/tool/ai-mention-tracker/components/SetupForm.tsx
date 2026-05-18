@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { FormData } from "../types";
+import { COUNTRIES } from "@/lib/countries";
 
 interface Props {
   onSubmit: (data: FormData) => void;
@@ -205,10 +206,11 @@ export default function SetupForm({ onSubmit }: Props) {
                         value={targetCountry}
                         onChange={(e) => setTargetCountry(e.target.value)}
                       >
-                        <option value="US">United States</option>
-                        <option value="UK">United Kingdom</option>
-                        <option value="CA">Canada</option>
-                        <option value="AU">Australia</option>
+                        {COUNTRIES.map((country) => (
+                          <option key={country.code} value={country.code}>
+                            {country.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                     <div className="flex flex-col gap-2">

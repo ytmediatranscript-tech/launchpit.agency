@@ -26,7 +26,7 @@ interface RunTrackerPayload {
 export async function POST(request: NextRequest) {
   const body = (await request.json()) as RunTrackerPayload;
 
-  const { brandName, brandDomain, competitors, keywords, apiLogin, apiPassword } = body;
+  const { brandName, brandDomain, competitors, keywords, apiLogin, apiPassword, targetCountry, targetLanguage } = body;
 
   if (!brandName || !brandDomain || !keywords?.length) {
     return new Response(
@@ -66,7 +66,9 @@ export async function POST(request: NextRequest) {
                 brandName,
                 brandDomain,
                 apiLogin,
-                apiPassword
+                apiPassword,
+                targetCountry,
+                targetLanguage
               );
 
               /* 

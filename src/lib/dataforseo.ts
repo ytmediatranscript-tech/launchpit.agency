@@ -2,6 +2,14 @@
 /*  DataForSEO API Client                                              */
 /* ------------------------------------------------------------------ */
 
+import { COUNTRIES } from "./countries";
+
+function getCountryName(code?: string): string | undefined {
+  if (!code) return undefined;
+  const match = COUNTRIES.find((c) => c.code.toUpperCase() === code.toUpperCase());
+  return match ? match.name : undefined;
+}
+
 const DEFAULT_LOGIN = process.env.DATAFORSEO_LOGIN;
 const DEFAULT_PASSWORD = process.env.DATAFORSEO_PASSWORD;
 
@@ -104,19 +112,23 @@ async function dataForSEOFetch(
 
 interface PlatformConfig {
   endpoint: string;
-  buildPayload: (keyword: string) => Record<string, unknown>;
+  buildPayload: (keyword: string, targetCountry?: string, targetLanguage?: string) => Record<string, unknown>;
   extractText: (item: DataForSEOItem) => string;
 }
 
 const PLATFORM_CONFIGS: Record<PlatformId, PlatformConfig> = {
   google: {
     endpoint: "/v3/serp/google/ai_mode/live/advanced",
-    buildPayload: (keyword: string) => ({
-      keyword,
-      location_code: 2840, // United States
-      language_code: "en",
-      device: "desktop",
-    }),
+    buildPayload: (keyword: string, targetCountry?: string, targetLanguage?: string) => {
+      const countryName = getCountryName(targetCountry) || "United States";
+      const languageCode = targetLanguage || "en";
+      return {
+        keyword,
+        location_name: countryName,
+        language_code: languageCode,
+        device: "desktop",
+      };
+    },
     extractText: (item) => item.markdown ?? item.text ?? "",
   },
   chatgpt: {
@@ -170,7 +182,9 @@ export async function checkMention(
   brand: string,
   domain: string,
   login?: string,
-  password?: string
+  password?: string,
+  targetCountry?: string,
+  targetLanguage?: string
 ): Promise<MentionCheckResult> {
   try {
     const config = PLATFORM_CONFIGS[platform];
@@ -178,7 +192,7 @@ export async function checkMention(
       throw new Error(`Unknown platform: ${platform}`);
     }
 
-    const payload = config.buildPayload(keyword);
+    const payload = config.buildPayload(keyword, targetCountry, targetLanguage);
     const res = await dataForSEOFetch(config.endpoint, payload, login, password);
 
     const task = res.tasks?.[0];
