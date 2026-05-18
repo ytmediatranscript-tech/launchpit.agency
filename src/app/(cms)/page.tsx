@@ -55,9 +55,7 @@ export default function Home() {
         <Booking />
       </SectionReveal>
 
-      <SectionReveal>
-        <Footer />
-      </SectionReveal>
+      <Footer />
     </main>
   );
 }

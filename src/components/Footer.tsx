@@ -16,7 +16,7 @@ const Footer = () => {
                       <div className="footer-innerwrap">
                         <div className="container-fluid">
                           <div className="row">
-                            <div className="col-md-4 reveal">
+                            <div className="col-md-4">
                               <div className="logowrapper mb-3">
                                 <Link href="/" className="heading-two text-white">
                                   LaunchPit
@@ -50,7 +50,7 @@ const Footer = () => {
                                 </ul>
                               </div>
                             </div>
-                            <div className="col-md-6 offset-md-2 reveal">
+                            <div className="col-md-6 offset-md-2">
                               <h4 className="text-white">Services</h4>
                               <div className="menulist">
                                 <ul className="list-unstyled p-0">
