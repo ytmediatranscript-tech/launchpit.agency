@@ -44,3 +44,36 @@ body {
 .flex-col { flex-direction: column; }
 .min-h-screen { min-height: 100vh; }
 .w-full { width: 100%; }
+
+/* Premium Email Header Styling */
+.email-header-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary, #ec5b13) !important;
+  font-family: var(--font-family--heading-font), sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  line-height: 1.2;
+}
+
+.email-header-btn:hover {
+  color: var(--black) !important;
+  transform: translateY(-1px);
+}
+
+.email-header-btn:active {
+  transform: translateY(0);
+}
+
+/* Vertically center align all navigation items in the header list */
+ul.primary-menu {
+  align-items: center !important;
+}
+
+#menu-item-email {
+  display: flex !important;
+  align-items: center;
+}

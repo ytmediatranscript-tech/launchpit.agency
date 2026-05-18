@@ -38,7 +38,7 @@ const CTA = () => {
             </p>
             <div className="btnwrapper d-flex justify-content-start">
               <Link href="#booking" className="button-body button-body-white bg-white">
-                <span className="button-text text-black">Explore our Approach</span>
+                <span className="button-text text-black">Book A Consultation</span>
               </Link>
             </div>
           </div>

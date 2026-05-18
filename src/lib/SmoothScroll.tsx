@@ -27,8 +27,38 @@ const SmoothScroll = ({ children }: { children: React.ReactNode }) => {
 
     gsap.ticker.lagSmoothing(0);
 
+    // Smooth scroll interceptor for all local anchor links.
+    // This allows re-scrolling to `#booking` even if the current URL hash is already `#booking`.
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      const anchor = target.closest("a");
+      if (!anchor) return;
+
+      const href = anchor.getAttribute("href");
+      if (href && href.startsWith("#")) {
+        const targetId = href;
+        if (targetId === "#") return;
+
+        const targetEl = document.querySelector(targetId) as HTMLElement | null;
+        if (targetEl) {
+          e.preventDefault();
+          lenis.scrollTo(targetEl, {
+            offset: 0,
+            duration: 1.4,
+            immediate: false,
+          });
+          
+          // Safely update history hash without jumping
+          window.history.pushState(null, "", targetId);
+        }
+      }
+    };
+
+    document.addEventListener("click", handleAnchorClick);
+
     return () => {
       lenis.destroy();
+      document.removeEventListener("click", handleAnchorClick);
     };
   }, []);
 

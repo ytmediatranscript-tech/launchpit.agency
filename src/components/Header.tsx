@@ -41,6 +41,11 @@ const Header = () => {
                 Book Online
               </Link>
             </li>
+            <li className="rmp-menu-item">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=biswa@launchpit.agency" target="_blank" rel="noopener noreferrer" className="rmp-menu-item-link" onClick={() => setIsMenuOpen(false)}>
+                biswa@launchpit.agency
+              </a>
+            </li>
           </ul>
         </div>
       </div>
@@ -128,6 +133,12 @@ const Header = () => {
                 </li>
                 <li id="menu-item-113" className="menu-item">
                   <Link href="#booking">Book Online</Link>
+                </li>
+                <li id="menu-item-email" className="menu-item">
+                  <a href="https://mail.google.com/mail/?view=cm&fs=1&to=biswa@launchpit.agency" target="_blank" rel="noopener noreferrer" className="email-header-btn">
+                    <span className="material-symbols-outlined align-middle" style={{ fontSize: "18px", marginTop: "-3px" }}>mail</span>
+                    <span>biswa@launchpit.agency</span>
+                  </a>
                 </li>
               </ul>
             </nav>
