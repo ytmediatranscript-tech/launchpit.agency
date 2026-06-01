@@ -67,7 +67,7 @@ export default function ToolHubPage() {
   ];
 
   return (
-    <main className="bg-[#f8f6f6] h-screen max-h-screen overflow-hidden text-[#4a473a] selection:bg-[#ec5b13] selection:text-white flex flex-col justify-between p-4 md:p-8">
+    <main className="bg-[#f8f6f6] min-h-screen text-[#4a473a] selection:bg-[#ec5b13] selection:text-white flex flex-col justify-between p-4 md:p-8 py-10 md:py-16 gap-8">
       <div className="max-w-5xl w-full mx-auto my-auto flex flex-col justify-center">
         
         {/* Security Alert Header */}

@@ -16,7 +16,7 @@ export default function TrackerLayout({
     <TrackerStoreProvider>
       <div className="flex min-h-screen bg-background-light">
         <TrackerSidebar />
-        <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
           {children}
         </div>
       </div>
