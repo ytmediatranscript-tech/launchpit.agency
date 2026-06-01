@@ -29,13 +29,25 @@ export default function TrackerSidebar() {
           <div className="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold shadow-sm shadow-primary/20">
             <span className="material-symbols-outlined text-lg">troubleshoot</span>
           </div>
-          <h1 className="font-display font-bold text-lg tracking-tight">Mention Tracker</h1>
+          <span 
+            className="font-display font-bold text-lg tracking-tight text-white block select-none"
+            style={{ fontSize: "1.125rem", lineHeight: "1.75rem", margin: 0, textTransform: "none", letterSpacing: "-0.025em" }}
+          >
+            Mention Tracker
+          </span>
         </div>
       </div>
       <nav className="p-4 flex-1">
-        <ul className="space-y-1">
+        <ul 
+          className="space-y-1 !list-none !p-0 !m-0" 
+          style={{ listStyleType: "none", listStyle: "none", padding: 0, margin: 0 }}
+        >
           {navItems.map((item) => (
-            <li key={item.path}>
+            <li 
+              key={item.path} 
+              className="!m-0 !p-0" 
+              style={{ margin: 0, padding: 0, listStyleType: "none", listStyle: "none" }}
+            >
               <button
                 onClick={() => window.location.href = item.path}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium transition-colors ${
